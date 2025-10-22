@@ -16,40 +16,40 @@ const getAggregatedData = async (req, res) => {
       concepts
     } = req.query;
 
-    // Build match stage for filtering with OR logic between different filter types
-    const orConditions = [];
+    // Build match stage for filtering with AND logic between different filter types
+    const matchConditions = {};
 
     // Handle single filter values
-    if (category) orConditions.push({ category: category });
-    if (branch) orConditions.push({ branch: branch });
-    if (supplier) orConditions.push({ supplier: supplier });
-    if (fabric) orConditions.push({ fabric: fabric });
-    if (concept) orConditions.push({ concept: concept });
+    if (category) matchConditions.category = category;
+    if (branch) matchConditions.branch = branch;
+    if (supplier) matchConditions.supplier = supplier;
+    if (fabric) matchConditions.fabric = fabric;
+    if (concept) matchConditions.concept = concept;
 
     // Handle multiple filter values (arrays)
     if (categories) {
       const categoryArray = Array.isArray(categories) ? categories : categories.split(',');
-      orConditions.push({ category: { $in: categoryArray } });
+      matchConditions.category = { $in: categoryArray };
     }
     if (branches) {
       const branchArray = Array.isArray(branches) ? branches : branches.split(',');
-      orConditions.push({ branch: { $in: branchArray } });
+      matchConditions.branch = { $in: branchArray };
     }
     if (suppliers) {
       const supplierArray = Array.isArray(suppliers) ? suppliers : suppliers.split(',');
-      orConditions.push({ supplier: { $in: supplierArray } });
+      matchConditions.supplier = { $in: supplierArray };
     }
     if (fabrics) {
       const fabricArray = Array.isArray(fabrics) ? fabrics : fabrics.split(',');
-      orConditions.push({ fabric: { $in: fabricArray } });
+      matchConditions.fabric = { $in: fabricArray };
     }
     if (concepts) {
       const conceptArray = Array.isArray(concepts) ? concepts : concepts.split(',');
-      orConditions.push({ concept: { $in: conceptArray } });
+      matchConditions.concept = { $in: conceptArray };
     }
 
     // Build the match stage
-    const matchStage = orConditions.length > 0 ? { $or: orConditions } : {};
+    const matchStage = matchConditions;
 
     // Aggregation pipeline
     const pipeline = [
