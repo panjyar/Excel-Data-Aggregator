@@ -27,7 +27,7 @@ A full-stack web application that imports Excel (.xlsx) files into MongoDB, aggr
 
 ### 1. Clone the repository
 ```bash
-git clone <repository-url>
+git clone https://github.com/panjyar/Excel-Data-Aggregator.git
 cd googlesheetAgreegator
 ```
 
