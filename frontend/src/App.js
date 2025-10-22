@@ -34,7 +34,6 @@ function App() {
       const options = response.data.filterOptions;
       setFilterOptions(options);
       
-      // Initialize filters with all available options (show all data by default)
       setFilters({
         categories: options.categories || [],
         branches: options.branches || [],
@@ -57,8 +56,6 @@ function App() {
     try {
       const params = new URLSearchParams();
       
-      // Add filter parameters only if they're not showing all options
-      // If all categories are selected, don't send category filter (show all)
       if (filters.categories.length > 0 && filters.categories.length < filterOptions.categories.length) {
         params.append('categories', filters.categories.join(','));
       }
@@ -90,12 +87,10 @@ function App() {
     }
   }, [filters, filterOptions]);
 
-  // Fetch filter options on component mount
   useEffect(() => {
     fetchFilterOptions();
   }, []);
 
-  // Fetch data when filters change or when filter options are loaded
   useEffect(() => {
     if (filterOptions.categories.length > 0) {
       fetchData();
@@ -116,7 +111,6 @@ function App() {
         },
       });
       
-      // Refresh filter options and data after upload
       await fetchFilterOptions();
       await fetchData();
       
@@ -135,7 +129,6 @@ function App() {
   };
 
   const handleClearFilters = () => {
-    // Reset to all available options (show all data)
     setFilters({
       categories: filterOptions.categories || [],
       branches: filterOptions.branches || [],
