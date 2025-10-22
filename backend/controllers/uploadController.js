@@ -1,8 +1,7 @@
-const XLSX = require('xlsx');
 const Data = require('../models/DataModel');
 const fs = require('fs');
 const path = require('path');
-const { processRowData, hasValidData } = require('../utils/helpers');
+const ExcelProcessor = require('../utils/excelProcessor');
 
 // Process and save Excel data
 const processExcelData = async (req, res) => {
@@ -17,20 +16,17 @@ const processExcelData = async (req, res) => {
     const filePath = req.file.path;
     console.log('Processing file:', filePath);
 
-    // Read the Excel file
-    const workbook = XLSX.readFile(filePath);
-    const sheetName = workbook.SheetNames[0];
-    const worksheet = workbook.Sheets[sheetName];
-    const jsonData = XLSX.utils.sheet_to_json(worksheet);
-
-    console.log(`Found ${jsonData.length} rows in Excel file`);
-
-    // Process and clean the data using helper functions
-    const processedData = jsonData
-      .map(processRowData)
-      .filter(hasValidData);
-
-    console.log(`Processed ${processedData.length} valid rows`);
+    // Use the smart Excel processor
+    const processor = new ExcelProcessor();
+    const result = processor.processExcelFile(filePath);
+    
+    if (!result.success) {
+      throw new Error(result.error);
+    }
+    
+    const processedData = result.data;
+    console.log(`✅ Successfully processed ${processedData.length} rows`);
+    console.log('📋 Column mappings used:', result.mappings);
 
     // Clear existing data
     await Data.deleteMany({});
@@ -55,8 +51,8 @@ const processExcelData = async (req, res) => {
       success: true,
       message: `Successfully imported ${insertedCount} records`,
       recordCount: insertedCount,
-      originalRowCount: jsonData.length,
-      processedRowCount: processedData.length
+      originalRowCount: result.totalRows,
+      processedRowCount: result.validRows
     });
 
   } catch (error) {

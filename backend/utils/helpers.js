@@ -6,8 +6,9 @@
  * @returns {string} - Cleaned string value
  */
 const cleanString = (value) => {
-  if (value === null || value === undefined) return '';
-  return value.toString().trim();
+  if (value === null || value === undefined || value === '') return '';
+  const cleaned = value.toString().trim();
+  return cleaned === 'undefined' || cleaned === 'null' ? '' : cleaned;
 };
 
 /**
@@ -40,6 +41,7 @@ const cleanConcept = (concept) => {
  * @returns {number} - Parsed numeric value
  */
 const parseNumeric = (value, defaultValue = 0) => {
+  if (value === null || value === undefined || value === '') return defaultValue;
   const parsed = parseFloat(value);
   return isNaN(parsed) ? defaultValue : parsed;
 };
@@ -54,21 +56,80 @@ const hasValidData = (row) => {
 };
 
 /**
- * Process Excel row data
+ * Process Excel row data with flexible column matching
  * @param {Object} row - Raw Excel row data
  * @returns {Object} - Processed row data
  */
 const processRowData = (row) => {
+  
+  // Try different possible column names for each field
+  const category = cleanString(
+    row['CategoryShortName'] || 
+    row['Category Filter'] || 
+    row['Category'] ||
+    row['category']
+  );
+  
+  const branch = cleanString(
+    row['Branch'] || 
+    row['branch'] ||
+    row['BRANCH']
+  );
+  
+  const supplier = cleanString(
+    row['Supplier'] || 
+    row['supplier'] ||
+    row['SUPPLIER']
+  );
+  
+  const articleNo = cleanString(
+    row['ArticleNo'] || 
+    row['Article No'] ||
+    row['articleNo'] ||
+    row['ARTICLE_NO']
+  );
+  
+  const fabric = cleanFabric(
+    row['Fabric'] || 
+    row['fabric'] ||
+    row['FABRIC']
+  );
+  
+  const concept = cleanConcept(
+    row['Concept'] || 
+    row['concept'] ||
+    row['CONCEPT']
+  );
+  
+  const netSlsQty = parseNumeric(
+    row['NetSlsQty'] || 
+    row['Net Sls Qty'] ||
+    row['netSlsQty'] ||
+    row['NET_SLS_QTY']
+  );
+  
+  const amount = parseNumeric(
+    row['Amount'] || 
+    row['amount'] ||
+    row['AMOUNT']
+  );
+  
+  const cost = parseNumeric(
+    row['Cost'] || 
+    row['cost'] ||
+    row['COST']
+  );
+  
   return {
-    category: cleanString(row['CategoryShortName'] || row['Category Filter']),
-    branch: cleanString(row['Branch']),
-    supplier: cleanString(row['Supplier']),
-    articleNo: cleanString(row['ArticleNo']),
-    fabric: cleanFabric(row['Fabric']),
-    concept: cleanConcept(row['Concept']),
-    NetSlsQty: parseNumeric(row['NetSlsQty']),
-    Amount: parseNumeric(row['Amount']),
-    Cost: parseNumeric(row['Cost']),
+    category,
+    branch,
+    supplier,
+    articleNo,
+    fabric,
+    concept,
+    NetSlsQty: netSlsQty,
+    Amount: amount,
+    Cost: cost,
     originalData: row
   };
 };
