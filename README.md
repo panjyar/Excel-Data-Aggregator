@@ -1,188 +1,74 @@
-# Excel Data Aggregator - MERN Stack Application
+#  Excel Data Aggregator  
+**Full-Stack MERN Application for Importing, Aggregating, and Filtering Excel Data**
 
-A full-stack web application that imports Excel (.xlsx) files into MongoDB, aggregates data using advanced filtering, and displays the results in a responsive React frontend.
+![License](https://img.shields.io/badge/License-MIT-green)
+![Node.js](https://img.shields.io/badge/Node.js-339933?logo=node.js&logoColor=white)
+![Express.js](https://img.shields.io/badge/Express.js-black?logo=express&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)
+![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?logo=mongodb&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)
+![Multer](https://img.shields.io/badge/File%20Upload-Multer-blue)
+![Status](https://img.shields.io/badge/Status-Deployed-success)
 
-## Features
+---
 
-- **Excel File Import**: Upload .xlsx files and automatically import data into MongoDB
-- **Advanced Filtering**: Filter data by category, branch, supplier, fabric, and concept
-- **Data Aggregation**: Automatically merge identical records and sum quantities
-- **Responsive UI**: Modern, mobile-friendly interface
-- **Real-time Updates**: Instant filtering and data updates
+##  Overview  
+A full-stack **MERN** web application that lets users upload Excel files, aggregates and filters the data, and displays results through an intuitive, real-time React interface.  
+It automates repetitive Excel analysis tasks and provides insights instantly.
 
-## Tech Stack
+---
 
-- **Frontend**: React 18, Vite, Axios, React Dropzone, Styled Components
-- **Backend**: Node.js, Express.js, MongoDB, Mongoose
-- **File Processing**: Multer, XLSX
-- **Database**: MongoDB with aggregation pipelines
+##  Motivation  
+Data teams often spend hours manually combining Excel sheets and applying filters.  
+This project was built to **simplify Excel-based analysis** by turning it into a one-click web process — making it faster, more reliable, and repeatable.
 
-## Prerequisites
+---
 
-- Node.js (v18 or higher)
-- MongoDB (local installation or MongoDB Atlas)
-- npm or yarn
+##  Problem It Solves  
+- Eliminates repetitive manual aggregation work.  
+- Enables users to quickly filter data using multiple fields.  
+- Automatically detects and merges duplicate records.  
+- Provides a responsive dashboard for data visualization.  
 
-## Installation
+---
 
-### 1. Clone the repository
-```bash
-git clone https://github.com/panjyar/Excel-Data-Aggregator.git
-cd googlesheetAgreegator
-```
+## ⚙️ Tech Stack  
 
-### 2. Install Backend Dependencies
-```bash
-cd backend
-npm install
-```
+| Category | Technology |
+|-----------|-------------|
+| **Frontend** | React.js (Vite), Axios, Styled Components, React Dropzone |
+| **Backend** | Node.js, Express.js |
+| **Database** | MongoDB Atlas |
+| **File Processing** | Multer, XLSX |
+| **Deployment** | Render  |
 
-### 3. Install Frontend Dependencies
-```bash
-cd ../frontend
-npm install
-```
+---
 
-### 4. Environment Setup
-Create a `.env` file in the backend directory:
-```env
-PORT=5000
-MONGODB_URI=mongodb://localhost:27017/excel-aggregator
-```
+##  Features  
+-  **Excel File Import:** Upload `.xlsx` or `.xls` files directly  
+-  **Advanced Filtering:** Filter by category, branch, supplier, fabric, and concept  
+-  **Smart Aggregation:** Automatically merges identical records and sums quantities  
+-  **Real-Time Updates:** Instant display of filtered results  
+-  **Responsive UI:** Works smoothly on desktop and mobile  
+-  **Summary View:** Displays total counts and quantities  
+-  **Error Handling:** Handles invalid files, empty uploads, and bad formats gracefully  
 
-## Running the Application
+---
 
-### 1. Start MongoDB
-Make sure MongoDB is running on your system:
-```bash
-# For local MongoDB
-mongod
+##  What I Learned  
+- How to parse and process Excel files using **Multer** and **XLSX**.  
+- Designing **MongoDB aggregation pipelines** for data grouping and filtering.  
+- Building a full-stack data visualization system using **React** and **Express**.  
+- Managing asynchronous uploads and real-time state updates.  
+- Deploying a complete MERN application on cloud platforms.  
 
-# Or use MongoDB Atlas connection string in .env
-```
+---
 
-### 2. Start the Backend Server
-```bash
-cd backend
-npm start
-# or for development with auto-restart
-npm run dev
-```
+##  What Makes It Stand Out  
+- Efficient use of MongoDB aggregation pipelines for real-time data summarization.  
+- Flexible filtering system that supports multiple selections per field.  
+- Clean React-based frontend built with Vite for fast performance.  
+- Backend structured for scalability and easy maintenance.  
 
-### 3. Start the Frontend Development Server
-```bash
-cd frontend
-npm run dev
-```
+---
 
-The application will be available at:
-- Frontend: http://localhost:5173
-- Backend API: http://localhost:5000
-
-## Usage
-
-### 1. Upload Excel File
-- Click on the upload area or drag and drop an Excel file
-- Supported formats: .xlsx, .xls
-- The system will automatically process and import the data
-
-### 2. Filter Data
-- Use the filter panel to select specific categories, branches, suppliers, fabrics, or concepts
-- Multiple selections are supported for each filter type
-- Click "Apply Filters" to update the results
-- Click "Clear All" to reset all filters
-
-### 3. View Aggregated Data
-- The data table shows aggregated results based on your filters
-- Identical records are automatically merged with summed quantities
-- Summary statistics are displayed at the bottom
-
-## Data Structure
-
-The application expects Excel files with the following columns:
-- `CategoryShortName` or `Category Filter` → category
-- `branch` or `Branch Filter` → branch
-- `SupplierAlias` or `Supplier Filter` → supplier
-- `ArticleNo` → articleNo
-- `Fabric` → fabric
-- `Concept` → concept
-- `NetSlsQty` → NetSlsQty
-- `NetAmount` → Amount
-- `NetSlsCostValue` → Cost
-
-## API Endpoints
-
-### Upload
-- `POST /api/upload` - Upload and process Excel file
-
-### Data
-- `GET /api/data/aggregated` - Get aggregated data with filters
-- `GET /api/data/filter-options` - Get available filter options
-- `GET /api/data/count` - Get total record count
-- `DELETE /api/data/clear` - Clear all data
-
-## Aggregation Logic
-
-The application uses MongoDB aggregation pipelines to:
-1. Filter data based on selected criteria
-2. Group records by identical field values
-3. Sum NetSlsQty for grouped records
-4. Return only the specified display fields
-
-## Development
-
-### Project Structure
-```
-├── backend/
-│   ├── models/          # MongoDB models
-│   ├── routes/          # API routes
-│   ├── uploads/         # Temporary file storage
-│   └── server.js        # Express server
-├── frontend/
-│   ├── src/
-│   │   ├── components/  # React components
-│   │   ├── App.jsx      # Main app component
-│   │   └── main.jsx     # Entry point
-│   └── public/          # Static files
-└── README.md
-```
-
-### Key Components
-- **FileUpload**: Handles Excel file upload with drag & drop
-- **FilterPanel**: Multi-select filtering interface
-- **DataTable**: Displays aggregated data with summary statistics
-
-## Troubleshooting
-
-### Common Issues
-
-1. **MongoDB Connection Error**
-   - Ensure MongoDB is running
-   - Check connection string in .env file
-
-2. **File Upload Issues**
-   - Verify file format (.xlsx or .xls)
-   - Check file size (max 10MB)
-
-3. **Frontend Not Loading**
-   - Ensure backend is running on port 5000
-   - Check for CORS issues
-
-### Development Tips
-
-- Use `npm run dev` for backend auto-restart
-- Frontend hot-reload is enabled by default
-- Check browser console for API errors
-- Use MongoDB Compass to inspect imported data
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## License
-
-MIT License - see LICENSE file for details
